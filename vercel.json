@@ -9,41 +9,12 @@
       "destination": "https://salesforce-crud-app-gh54.onrender.com/oauth2/:path*"
     },
     {
-      "source": "/login/:path*",
-      "destination": "https://salesforce-crud-app-gh54.onrender.com/login/:path*"
+      "source": "/login/oauth2/code/:path*",
+      "destination": "https://salesforce-crud-app-gh54.onrender.com/login/oauth2/code/:path*"
     },
     {
       "source": "/logout",
       "destination": "https://salesforce-crud-app-gh54.onrender.com/logout"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
-    },
-    {
-      "source": "/oauth2/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
-    },
-    {
-      "source": "/login/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
     }
   ]
 }
