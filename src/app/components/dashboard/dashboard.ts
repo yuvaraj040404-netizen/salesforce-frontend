@@ -81,10 +81,10 @@ ngOnInit(): void {
   });
 }
 
-  login(): void {
-    window.location.href =
-      'http://localhost:8080/oauth2/authorization/salesforce';
-  }
+ login(): void {
+  window.location.href =
+    `${environment.apiUrl}/oauth2/authorization/salesforce`;
+}
 
  changeObject(): void {
   if (!this.loggedIn) {
@@ -298,8 +298,7 @@ loadRecords(): void {
 }  
 
   logout(): void {
- window.location.href =
-  `${environment.apiUrl}/oauth2/authorization/salesforce`;
+  window.location.href = `${environment.apiUrl}/logout`;
 }
 
  deleteRecord(record: SalesforceRecord): void {
