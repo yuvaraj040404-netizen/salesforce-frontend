@@ -1,0 +1,382 @@
+<div class="container">
+
+  <div class="header">
+
+    <div>
+      <h1>Salesforce CRUD App</h1>
+      <p>Manage Salesforce records</p>
+    </div>
+
+    <button *ngIf="!loggedIn"
+        class="login-button"
+        (click)="login()">
+  Login with Salesforce
+</button>
+
+    <button
+  *ngIf="loggedIn"
+  class="logout-button"
+  (click)="logout()">
+  Logout
+</button>
+
+  </div>
+
+
+  <div class="controls">
+
+    <div>
+
+      <label>
+        Salesforce Object
+      </label>
+
+      <select
+        [(ngModel)]="selectedObject"
+        (change)="changeObject()">
+
+        <option
+          *ngFor="let object of objects"
+          [value]="object">
+
+          {{ object }}
+
+        </option>
+
+      </select>
+
+    </div>
+<button
+  class="create-button"
+  (click)="openCreate()">
+
+  + Create {{ selectedObject }}
+
+</button>
+
+  </div>
+
+
+  <div
+    *ngIf="errorMessage"
+    class="error">
+
+    {{ errorMessage }}
+
+  </div>
+  <p>Records loaded: {{ records.length }}</p>
+
+  <div
+    class="table-container"
+    *ngIf="records.length > 0">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th
+            *ngFor="let column of columns">
+
+            {{ formatColumn(column) }}
+
+          </th>
+
+          <th>
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let record of records">
+
+          <td
+            *ngFor="let column of columns">
+
+            {{ record[column] }}
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              class="edit-button"
+              (click)="openEdit(record)">
+
+              Edit
+
+            </button>
+
+            <button
+              class="delete-button"
+              (click)="deleteRecord(record)">
+
+              Delete
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div
+    class="message"
+    *ngIf="loading">
+
+    Loading records...
+
+  </div>
+
+
+  <div
+    class="message"
+    *ngIf="!loading && records.length === 0">
+
+    No records found.
+
+  </div>
+
+
+  <div
+    class="load-more"
+    *ngIf="!loading && hasMore && records.length > 0">
+
+    <button
+      (click)="loadMore()">
+
+      Load More
+
+    </button>
+
+  </div>
+
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showForm">
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>
+
+          {{ editing ? 'Edit' : 'Create' }}
+          {{ selectedObject }}
+
+        </h2>
+
+        <button
+          class="close-button"
+          (click)="closeForm()">
+
+          ×
+
+        </button>
+
+      </div>
+
+      <ng-container
+        *ngIf="selectedObject === 'Account'">
+
+        <label>Name</label>
+
+       <input
+  type="text"
+  [(ngModel)]="formData.Name"
+  name="Name"
+  placeholder="Account Name"
+/>
+
+      </ng-container>
+
+      <ng-container
+        *ngIf="selectedObject === 'Opportunity'">
+
+        <label>Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.Name"
+          placeholder="Opportunity name">
+
+
+        <label>Stage</label>
+
+        <select
+          [(ngModel)]="formData.StageName">
+
+          <option value="Prospecting">
+            Prospecting
+          </option>
+
+          <option value="Qualification">
+            Qualification
+          </option>
+
+          <option value="Needs Analysis">
+            Needs Analysis
+          </option>
+
+          <option value="Proposal/Price Quote">
+            Proposal/Price Quote
+          </option>
+
+          <option value="Negotiation/Review">
+            Negotiation/Review
+          </option>
+
+          <option value="Closed Won">
+            Closed Won
+          </option>
+
+          <option value="Closed Lost">
+            Closed Lost
+          </option>
+
+        </select>
+
+
+        <label>Close Date</label>
+
+        <input
+          type="date"
+          [(ngModel)]="formData.CloseDate">
+
+      </ng-container>
+
+      <ng-container
+        *ngIf="selectedObject === 'Lead'">
+
+        <label>First Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.FirstName">
+
+
+        <label>Last Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.LastName">
+
+
+        <label>Company</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.Company">
+
+      </ng-container>
+
+      <ng-container
+        *ngIf="selectedObject === 'Contact'">
+
+        <label>First Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.FirstName">
+
+
+        <label>Last Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.LastName">
+
+      </ng-container>
+
+      <ng-container
+        *ngIf="selectedObject === 'Case'">
+
+        <label>Subject</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.Subject">
+
+
+        <label>Status</label>
+
+        <select
+          [(ngModel)]="formData.Status">
+
+          <option value="New">
+            New
+          </option>
+
+          <option value="Working">
+            Working
+          </option>
+
+          <option value="Escalated">
+            Escalated
+          </option>
+
+          <option value="Closed">
+            Closed
+          </option>
+
+        </select>
+
+
+        <label>Origin</label>
+
+        <select
+          [(ngModel)]="formData.Origin">
+
+          <option value="Web">
+            Web
+          </option>
+
+          <option value="Phone">
+            Phone
+          </option>
+
+          <option value="Email">
+            Email
+          </option>
+
+        </select>
+
+      </ng-container>
+
+      <div class="modal-actions">
+
+        <button
+          class="cancel-button"
+          (click)="closeForm()">
+
+          Cancel
+
+        </button>
+
+        <button
+          class="save-button"
+          (click)="saveRecord()">
+
+          {{ editing ? 'Update' : 'Create' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
