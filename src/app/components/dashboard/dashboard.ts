@@ -81,7 +81,7 @@ ngOnInit(): void {
   });
 }
 
- login(): void {
+login(): void {
   window.location.href =
     `${environment.apiUrl}/oauth2/authorization/salesforce`;
 }
