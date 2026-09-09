@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'http://localhost:8080'
+  apiUrl: 'https://salesforce-crud-app-gh54.onrender.com'
 };
